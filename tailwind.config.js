@@ -13,8 +13,10 @@ module.exports = {
         harbour: {
           50: "#f3f7f8",
           100: "#e1ecef",
+          200: "#c9dce1",
           500: "#3d7a8c",
           700: "#1f4f5c",
+          800: "#174654",
           900: "#0f3d4c",
         },
         sand: {
