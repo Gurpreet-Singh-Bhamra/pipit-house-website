@@ -1,12 +1,47 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import type { CottagePhoto } from "@/lib/gallery";
+
+function useGalleryColumns() {
+  const [columnCount, setColumnCount] = useState(1);
+
+  useLayoutEffect(() => {
+    const sm = window.matchMedia("(min-width: 640px)");
+    const lg = window.matchMedia("(min-width: 1024px)");
+
+    const update = () => {
+      setColumnCount(lg.matches ? 3 : sm.matches ? 2 : 1);
+    };
+
+    update();
+    sm.addEventListener("change", update);
+    lg.addEventListener("change", update);
+
+    return () => {
+      sm.removeEventListener("change", update);
+      lg.removeEventListener("change", update);
+    };
+  }, []);
+
+  return columnCount;
+}
+
+function splitIntoColumns<T>(items: T[], columnCount: number) {
+  const columns = Array.from({ length: columnCount }, () => [] as T[]);
+
+  items.forEach((item, index) => {
+    columns[index % columnCount].push(item);
+  });
+
+  return columns;
+}
 
 export function GalleryMasonry({ photos }: { photos: CottagePhoto[] }) {
   const [active, setActive] = useState<CottagePhoto | null>(null);
-  const [featured, ...rest] = photos;
+  const columnCount = useGalleryColumns();
+  const columns = splitIntoColumns(photos, columnCount);
 
   useEffect(() => {
     if (!active) {
@@ -30,21 +65,21 @@ export function GalleryMasonry({ photos }: { photos: CottagePhoto[] }) {
 
   return (
     <>
-      {featured ? (
-        <PhotoCard
-          photo={featured}
-          featured
-          onOpen={() => setActive(featured)}
-        />
-      ) : null}
-
-      <div className="mt-4 grid grid-cols-1 items-start gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {rest.map((photo) => (
-          <PhotoCard
-            key={photo.slug}
-            photo={photo}
-            onOpen={() => setActive(photo)}
-          />
+      <div className="flex gap-5">
+        {columns.map((column, columnIndex) => (
+          <div
+            key={columnIndex}
+            className="flex min-w-0 flex-1 flex-col gap-5"
+          >
+            {column.map((photo, photoIndex) => (
+              <PhotoCard
+                key={photo.slug}
+                photo={photo}
+                priority={photoIndex === 0}
+                onOpen={() => setActive(photo)}
+              />
+            ))}
+          </div>
         ))}
       </div>
 
@@ -67,7 +102,7 @@ export function GalleryMasonry({ photos }: { photos: CottagePhoto[] }) {
               height={active.height}
               className="max-h-[80vh] w-auto rounded-xl object-contain"
             />
-            <figcaption className="mt-3 text-center text-sm text-sand-100">
+            <figcaption className="mt-3 px-4 text-center text-sm text-sand-100">
               {active.caption}
             </figcaption>
             <button
@@ -86,35 +121,35 @@ export function GalleryMasonry({ photos }: { photos: CottagePhoto[] }) {
 
 function PhotoCard({
   photo,
-  featured = false,
+  priority = false,
   onOpen,
 }: {
   photo: CottagePhoto;
-  featured?: boolean;
+  priority?: boolean;
   onOpen: () => void;
 }) {
+  const landscape = photo.width >= photo.height;
+
   return (
     <button
       type="button"
       onClick={onOpen}
-      className={`block w-full overflow-hidden rounded-2xl text-left shadow-sm ring-1 ring-harbour-100 transition hover:shadow-md ${
-        featured ? "" : ""
-      }`}
+      className="block w-full overflow-hidden rounded-2xl text-left shadow-sm ring-1 ring-harbour-100 transition hover:shadow-md"
     >
       <Image
         src={photo.src}
         alt={photo.alt}
         width={photo.width}
         height={photo.height}
-        priority={featured}
-        sizes={
-          featured
-            ? "100vw"
-            : "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-        }
-        className={`w-full object-cover ${featured ? "max-h-[70vh]" : "h-auto"}`}
+        priority={priority}
+        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+        className="h-auto w-full object-cover"
       />
-      <p className="bg-white px-4 py-3 text-sm leading-relaxed text-harbour-700">
+      <p
+        className={`bg-white text-center text-sm leading-relaxed text-harbour-700 ${
+          landscape ? "px-8 py-5 sm:px-10" : "px-6 py-4"
+        }`}
+      >
         {photo.caption}
       </p>
     </button>
