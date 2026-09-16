@@ -50,7 +50,7 @@ export function pageMetadata({
   return {
     title,
     description,
-    keywords: [...new Set([...SITE_KEYWORDS, ...(keywords ?? [])])],
+    keywords: Array.from(new Set([...SITE_KEYWORDS, ...(keywords ?? [])])),
     alternates: {
       canonical: path,
     },
