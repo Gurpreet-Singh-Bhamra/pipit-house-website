@@ -1,9 +1,19 @@
 import type { Metadata } from "next";
 import { BookingButton } from "@/components/BookingButton";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Contact",
-};
+  description:
+    "Contact and Pipit House Whitby booking enquiries for this dog-friendly Whitby holiday let — a traditional fisherman’s cottage in North Yorkshire.",
+  path: "/contact",
+  ogTitle: "Contact Pipit House | Whitby holiday let",
+  keywords: [
+    "Pipit House Whitby booking",
+    "Whitby holiday let",
+    "dog-friendly accommodation Whitby",
+  ],
+});
 
 export default function ContactPage() {
   return (

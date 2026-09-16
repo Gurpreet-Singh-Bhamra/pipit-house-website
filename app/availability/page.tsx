@@ -1,9 +1,20 @@
 import type { Metadata } from "next";
 import { BookingButton } from "@/components/BookingButton";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Availability",
-};
+  description:
+    "Check availability and book Pipit House Whitby — a dog-friendly holiday cottage and Whitby holiday let in North Yorkshire, booked through Sykes.",
+  path: "/availability",
+  ogTitle: "Book Pipit House Whitby | Check availability",
+  keywords: [
+    "Pipit House Whitby booking",
+    "Whitby holiday let",
+    "dog-friendly accommodation Whitby",
+    "holiday cottage Whitby North Yorkshire",
+  ],
+});
 
 export default function AvailabilityPage() {
   return (

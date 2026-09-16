@@ -2,12 +2,20 @@ import type { Metadata } from "next";
 import { EventCard } from "@/components/EventCard";
 import { BookingButton } from "@/components/BookingButton";
 import { getEventsCatalog, getLocalEvents } from "@/lib/events";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Local Events",
   description:
-    "Upcoming festivals, the regatta, and seasonal Whitby weekends — with notes for guests staying at Pipit House.",
-};
+    "Upcoming Whitby festivals, the regatta, and seasonal weekends for guests at Pipit House — a holiday cottage and Whitby holiday let in North Yorkshire.",
+  path: "/blog",
+  ogTitle: "Whitby local events | Pipit House holiday cottage",
+  keywords: [
+    "Whitby holiday let",
+    "holiday cottage Whitby North Yorkshire",
+    "Pipit House Whitby",
+  ],
+});
 
 export default function BlogPage() {
   const catalog = getEventsCatalog();

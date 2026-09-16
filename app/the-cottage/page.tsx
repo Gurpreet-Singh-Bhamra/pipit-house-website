@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
 import { Amenities } from "@/components/Amenities";
 import { BookingButton } from "@/components/BookingButton";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "The Cottage",
-};
+  description:
+    "Tour this traditional fisherman’s cottage by Whitby harbour: three floors, a log burner, two bedrooms sleeping four, and dog-friendly holiday let details for Pipit House in North Yorkshire.",
+  path: "/the-cottage",
+  ogTitle: "Inside Pipit House | Traditional fisherman’s cottage, Whitby",
+  keywords: [
+    "traditional fisherman cottage Whitby harbor",
+    "Whitby holiday let",
+    "holiday cottage Whitby North Yorkshire",
+  ],
+});
 
 export default function TheCottagePage() {
   return (

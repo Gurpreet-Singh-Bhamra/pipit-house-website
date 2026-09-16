@@ -1,9 +1,19 @@
 import type { Metadata } from "next";
 import { BookingButton } from "@/components/BookingButton";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Location",
-};
+  description:
+    "Find Pipit House in Whitby, North Yorkshire — a traditional fisherman’s cottage a short walk from the harbour, swing bridge, abbey steps, and beach. Holiday cottage location and parking notes.",
+  path: "/location",
+  ogTitle: "Location | Holiday cottage Whitby, North Yorkshire",
+  keywords: [
+    "holiday cottage Whitby North Yorkshire",
+    "traditional fisherman cottage Whitby harbor",
+    "Whitby holiday let",
+  ],
+});
 
 export default function LocationPage() {
   return (

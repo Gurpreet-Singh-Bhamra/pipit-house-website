@@ -1,6 +1,23 @@
+import type { Metadata } from "next";
 import { Amenities } from "@/components/Amenities";
 import { BookingButton } from "@/components/BookingButton";
 import { Hero } from "@/components/Hero";
+import {
+  HOME_DESCRIPTION,
+  HOME_TITLE,
+  pageMetadata,
+} from "@/lib/site";
+
+export const metadata: Metadata = {
+  ...pageMetadata({
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    path: "/",
+  }),
+  title: {
+    absolute: HOME_TITLE,
+  },
+};
 
 export default function HomePage() {
   return (

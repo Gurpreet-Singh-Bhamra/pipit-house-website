@@ -2,10 +2,20 @@ import type { Metadata } from "next";
 import { BookingButton } from "@/components/BookingButton";
 import { GalleryMasonry } from "@/components/GalleryMasonry";
 import { GALLERY_PHOTOS } from "@/lib/gallery";
+import { pageMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Gallery",
-};
+  description:
+    "Photos of Pipit House, a Whitby holiday cottage in North Yorkshire — harbour views from the eaves, the log burner, bedrooms, and the town a few minutes on foot.",
+  path: "/gallery",
+  ogTitle: "Gallery | Pipit House Whitby holiday cottage",
+  keywords: [
+    "Pipit House Whitby",
+    "Whitby holiday let",
+    "holiday cottage Whitby North Yorkshire",
+  ],
+});
 
 export default function GalleryPage() {
   return (
