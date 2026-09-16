@@ -32,6 +32,9 @@ export const metadata: Metadata = {
   },
   description: HOME_DESCRIPTION,
   keywords: SITE_KEYWORDS,
+  verification: {
+    google: "O8NkqlBLcuX6xnaAdnehx8KnjCwtMbeINLkWh_4adco",
+  },
   authors: [{ name: SITE_NAME, url: SITE_URL }],
   creator: SITE_NAME,
   alternates: {
