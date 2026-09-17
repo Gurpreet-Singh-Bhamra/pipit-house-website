@@ -9,6 +9,7 @@ import {
   SITE_KEYWORDS,
   SITE_NAME,
   SITE_URL,
+  VACATION_RENTAL_JSON_LD,
 } from "@/lib/site";
 import "./globals.css";
 
@@ -67,6 +68,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen flex-col bg-background font-sans text-foreground antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(VACATION_RENTAL_JSON_LD),
+          }}
+        />
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

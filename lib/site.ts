@@ -29,6 +29,22 @@ export const OG_IMAGE = {
   alt: HERO_PHOTO.alt,
 };
 
+export const VACATION_RENTAL_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "VacationRental",
+  name: "Pipit House",
+  url: SITE_URL,
+  description:
+    "A holiday cottage in Whitby close to the harbor and town center",
+  petsAllowed: true,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Whitby",
+    addressRegion: "North Yorkshire",
+    addressCountry: "GB",
+  },
+};
+
 type PageSeo = {
   title: string;
   description: string;
