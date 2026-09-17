@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { HERO_PHOTO } from "@/lib/gallery";
+import { GALLERY_PHOTOS, HERO_PHOTO } from "@/lib/gallery";
 
 export const SITE_URL = "https://pipithousewhitby.co.uk";
 export const SITE_NAME = "Pipit House Whitby";
@@ -22,27 +22,77 @@ export const SITE_KEYWORDS = [
   "Whitby harbour holiday cottage",
 ];
 
+function jpegUrl(src: string): string {
+  return `${SITE_URL}${src.replace(/\.webp$/, ".jpg")}`;
+}
+
 export const OG_IMAGE = {
-  url: `${SITE_URL}${HERO_PHOTO.src.replace(/\.webp$/, ".jpg")}`,
+  url: jpegUrl(HERO_PHOTO.src),
   width: HERO_PHOTO.width,
   height: HERO_PHOTO.height,
   alt: HERO_PHOTO.alt,
 };
 
+const VACATION_RENTAL_IMAGE_SLUGS = [
+  HERO_PHOTO.slug,
+  "cottage-facade",
+  "living-room-stove",
+  "top-bedroom",
+  "bathroom",
+  "rear-deck",
+] as const;
+
+const photosBySlug = new Map(
+  GALLERY_PHOTOS.map((photo) => [photo.slug, photo]),
+);
+
+export const VACATION_RENTAL_IMAGES = VACATION_RENTAL_IMAGE_SLUGS.map(
+  (slug) => jpegUrl(photosBySlug.get(slug)?.src ?? HERO_PHOTO.src),
+);
+
 export const VACATION_RENTAL_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "VacationRental",
+  identifier: "pipit-house-whitby",
   name: "Pipit House",
   url: SITE_URL,
   description:
     "A holiday cottage in Whitby close to the harbor and town center",
   petsAllowed: true,
+  containsPlace: {
+    "@type": "Accommodation",
+    additionalType: "EntirePlace",
+    occupancy: {
+      "@type": "QuantitativeValue",
+      value: 4,
+    },
+    numberOfBedrooms: 2,
+    numberOfBathroomsTotal: 1,
+    bed: [
+      {
+        "@type": "BedDetails",
+        numberOfBeds: 1,
+        typeOfBed: "King",
+      },
+      {
+        "@type": "BedDetails",
+        numberOfBeds: 2,
+        typeOfBed: "Single",
+      },
+    ],
+  },
   address: {
     "@type": "PostalAddress",
     addressLocality: "Whitby",
     addressRegion: "North Yorkshire",
     addressCountry: "GB",
   },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 54.481897,
+    longitude: -0.609367,
+  },
+  image: VACATION_RENTAL_IMAGES,
 };
 
 type PageSeo = {
