@@ -38,8 +38,10 @@ const VACATION_RENTAL_IMAGE_SLUGS = [
   "cottage-facade",
   "living-room-stove",
   "top-bedroom",
+  "twin-bedroom",
   "bathroom",
   "rear-deck",
+  "cottage-stairs",
 ] as const;
 
 const photosBySlug = new Map(
@@ -53,12 +55,25 @@ export const VACATION_RENTAL_IMAGES = VACATION_RENTAL_IMAGE_SLUGS.map(
 export const VACATION_RENTAL_JSON_LD = {
   "@context": "https://schema.org",
   "@type": "VacationRental",
+  additionalType: "Cottage",
   identifier: "pipit-house-whitby",
   name: "Pipit House",
   url: SITE_URL,
   description:
     "A holiday cottage in Whitby close to the harbor and town center",
   petsAllowed: true,
+  image: VACATION_RENTAL_IMAGES,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Whitby",
+    addressRegion: "North Yorkshire",
+    addressCountry: "GB",
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: 54.481897,
+    longitude: -0.609367,
+  },
   containsPlace: {
     "@type": "Accommodation",
     additionalType: "EntirePlace",
@@ -81,18 +96,6 @@ export const VACATION_RENTAL_JSON_LD = {
       },
     ],
   },
-  address: {
-    "@type": "PostalAddress",
-    addressLocality: "Whitby",
-    addressRegion: "North Yorkshire",
-    addressCountry: "GB",
-  },
-  geo: {
-    "@type": "GeoCoordinates",
-    latitude: 54.481897,
-    longitude: -0.609367,
-  },
-  image: VACATION_RENTAL_IMAGES,
 };
 
 type PageSeo = {
