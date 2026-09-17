@@ -26,18 +26,21 @@ function jpegUrl(src: string): string {
   return `${SITE_URL}${src.replace(/\.webp$/, ".jpg")}`;
 }
 
+const SOCIAL_PHOTO =
+  GALLERY_PHOTOS.find((photo) => photo.slug === "top-bedroom") ?? HERO_PHOTO;
+
 export const OG_IMAGE = {
-  url: jpegUrl(HERO_PHOTO.src),
-  width: HERO_PHOTO.width,
-  height: HERO_PHOTO.height,
-  alt: HERO_PHOTO.alt,
+  url: jpegUrl(SOCIAL_PHOTO.src),
+  width: SOCIAL_PHOTO.width,
+  height: SOCIAL_PHOTO.height,
+  alt: SOCIAL_PHOTO.alt,
 };
 
 const VACATION_RENTAL_IMAGE_SLUGS = [
+  "top-bedroom",
   HERO_PHOTO.slug,
   "cottage-facade",
   "living-room-stove",
-  "top-bedroom",
   "twin-bedroom",
   "bathroom",
   "rear-deck",
