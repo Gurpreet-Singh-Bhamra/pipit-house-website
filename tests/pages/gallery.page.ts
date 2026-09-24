@@ -22,6 +22,7 @@ export class GalleryPage {
       waitUntil: "domcontentloaded",
     });
     await expect(this.heading).toBeVisible();
+    await this.page.evaluate(() => document.fonts.ready);
     await expect
       .poll(async () => {
         const box = await this.thumbnailImages.first().boundingBox();
