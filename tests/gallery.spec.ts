@@ -17,9 +17,10 @@ test.describe("Gallery", () => {
     await galleryPage.expectAllThumbnailsLoaded();
   });
 
-  test("matches visual layout snapshot", async ({ page, browserName }) => {
-    test.skip(browserName !== "chromium", "layout snapshot is chromium-only");
-
+  test("matches visual layout snapshot", async ({ page, browserName, isMobile }) => {
+    test.skip(browserName !== "chromium" || isMobile, "layout snapshot is desktop Chromium-only");
+  
+    await galleryPage.goto();
     await expect(page).toHaveScreenshot("gallery-layout.png", {
       maxDiffPixelRatio: 0.05,
       animations: "disabled",

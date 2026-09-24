@@ -33,12 +33,30 @@ test.describe("Homepage", () => {
 
 test.describe("Homepage primary nav destinations", () => {
   for (const link of PRIMARY_NAV_LINKS.filter((item) => item.href !== "/")) {
-    test(`opens ${link.name} from the header`, async ({ page }) => {
+    test(`opens ${link.name} from the header`, async ({ page, isMobile }) => {
       const homePage = new HomePage(page);
       await homePage.goto();
+      if (isMobile) {
+        await homePage.openMobileMenu();
+      }
       await homePage.openNavLink(link.name);
       await expect(page).toHaveURL(new RegExp(`${link.href}$`));
     });
   }
+
+  test.describe("Mobile Navigation", () => {
+    test("opens mobile drawer and navigates to Contact page", async ({ page, isMobile }) => {
+      test.skip(!isMobile, "This test only applies to mobile viewports");
+  
+      const homePage = new HomePage(page);
+      await homePage.goto();
+  
+      // Open drawer and click link
+      await homePage.openMobileMenu();
+      await homePage.openNavLink("Contact");
+  
+      await expect(page).toHaveURL(/\/contact$/);
+    });
+  });
 
 });

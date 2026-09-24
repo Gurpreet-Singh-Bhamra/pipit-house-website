@@ -15,6 +15,8 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: 'html',
+  /* Ensure snapshot names match across macOS (Darwin) and CI (Linux) */
+  snapshotPathTemplate: '{testDir}/{testFileDir}/__snapshots__/{arg}{ext}',
   
   /* Shared settings for all the projects below. */
   use: {
@@ -39,6 +41,15 @@ export default defineConfig({
       name: 'webkit',
       use: { ...devices['Desktop Safari'] },
     },
+    {
+      name: 'Mobile Chrome',
+      use: { ...devices['Pixel 5'] },
+    },
+    {
+      name: 'Mobile Safari',
+      use: { ...devices['iPhone 12'] },
+    },
+
   ],
 
   /* Run your local dev server before starting the tests */
@@ -47,4 +58,5 @@ export default defineConfig({
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
   },
+
 });

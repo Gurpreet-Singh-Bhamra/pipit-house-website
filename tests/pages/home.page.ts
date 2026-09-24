@@ -15,6 +15,8 @@ export class HomePage {
   readonly primaryNav: Locator;
   readonly heroHeading: Locator;
   readonly mainCta: Locator;
+  readonly mobileMenuButton: Locator;
+  readonly mobileNav: Locator;
 
   constructor(page: Page) {
     this.page = page;
@@ -32,6 +34,11 @@ export class HomePage {
       .getByRole("main")
       .getByRole("link", { name: "Check availability" })
       .first();
+
+    this.mobileMenuButton = page.getByRole("button", {
+      name: /open menu|toggle menu/i,
+    });
+    this.mobileNav = page.getByRole("navigation", { name: "Primary" });
   }
 
   async goto(): Promise<void> {
@@ -70,5 +77,11 @@ export class HomePage {
         .getByRole("link", { name: "Check availability", exact: true })
         .last(),
     ).toBeVisible();
+  }
+
+  async openMobileMenu(): Promise<void> {
+    if (await this.mobileMenuButton.isVisible()) {
+      await this.mobileMenuButton.click();
+    }
   }
 }
