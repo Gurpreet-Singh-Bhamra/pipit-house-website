@@ -1,0 +1,80 @@
+# Playwright QA — Pipit House
+
+Use these rules when writing or editing end-to-end tests. Stack: Playwright + TypeScript (strict) against this Next.js App Router site (`npm run dev`, base URL `http://localhost:3000`).
+
+## Locators (accessibility first)
+
+Prefer user-facing locators in this order: `getByRole` → `getByLabel` → `getByPlaceholder` → `getByAltText` → `getByText`. Use `getByTestId` only when the UI has no accessible name. Do not use CSS selectors, XPath, or chained `.locator('div.foo')` unless no accessible locator exists.
+
+Scope to landmark roles already in the app (`navigation` named Primary / Footer) so duplicate names do not collide.
+
+```typescript
+// ❌ BAD — brittle, not how a guest finds the page
+await page.locator("nav a:nth-child(3)").click();
+await page.waitForSelector(".text-harbour-900");
+
+// ✅ GOOD — role + accessible name
+const primaryNav = page.getByRole("navigation", { name: "Primary" });
+await primaryNav.getByRole("link", { name: "The Cottage" }).click();
+await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+```
+
+Public routes: `/`, `/the-cottage`, `/gallery`, `/blog`, `/location`, `/contact`, `/availability`. “Check availability” is an external Sykes link (`target="_blank"`); assert `href` / popup, do not complete a real booking.
+
+## Page Object Model
+
+Put locators and guest actions in page objects. Specs describe behaviour only. One page object per route (or shared chrome: header/footer). Constructor takes `Page`. Expose methods (`goto`, `openCottage`, `expectHeading`), not raw locators, unless a spec needs a one-off assertion.
+
+```typescript
+// e2e/pages/home.page.ts
+export class HomePage {
+  constructor(private readonly page: Page) {}
+
+  readonly primaryNav = this.page.getByRole("navigation", { name: "Primary" });
+
+  async goto(): Promise<void> {
+    await this.page.goto("/");
+  }
+
+  async openGallery(): Promise<void> {
+    await this.primaryNav.getByRole("link", { name: "Gallery" }).click();
+    await expect(this.page).toHaveURL(/\/gallery$/);
+  }
+}
+```
+
+Do not share mutable state between tests. Create a fresh page object in `test.beforeEach` or a fixture.
+
+## Auto-waiting
+
+Trust Playwright’s web-first assertions and actionability checks. Never use `page.waitForTimeout()`. Prefer `expect(locator).toBeVisible()`, `toHaveURL()`, `toHaveAttribute()`, `toHaveCount()`. Use `expect.poll` or `toPass` only for conditions Playwright cannot auto-wait. Hard-wait only if a third-party script has no observable UI; document why.
+
+```typescript
+// ❌ BAD
+await page.click("text=Gallery");
+await page.waitForTimeout(2000);
+
+// ✅ GOOD
+await homePage.openGallery();
+await expect(page.getByRole("heading", { name: "Gallery" })).toBeVisible();
+```
+
+Keep tests isolated and deterministic. Use `test.use` / project fixtures for viewport. Do not rely on production data that can go missing (events on `/blog` are generated).
+
+## TypeScript strict mode
+
+Match repo `tsconfig` (`strict: true`). No `any`, no unchecked `as`. Type `Page`, `Locator`, `BrowserContext`. Use `import type` for type-only imports. Page object methods return `Promise<void>` (or a typed result). Prefer `satisfies` for config objects.
+
+```typescript
+// ❌ BAD
+async clickThing(el: any) {
+  await el.click();
+}
+
+// ✅ GOOD
+async clickCta(name: string): Promise<void> {
+  await this.page.getByRole("link", { name }).click();
+}
+```
+
+Playwright config must use `defineConfig` with TypeScript. Point `webServer` at `npm run dev` (or `npm run start` after build) and `baseURL` at the local origin. Colocate tests under `e2e/` (specs `*.spec.ts`, page objects `e2e/pages/`).

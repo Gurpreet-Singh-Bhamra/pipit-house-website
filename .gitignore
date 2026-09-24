@@ -37,3 +37,11 @@ next-env.d.ts
 
 # original cottage photos (keep optimized copies in /public/images/cottage)
 /public/raw-photos/
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
