@@ -40,4 +40,5 @@ test.describe("Homepage primary nav destinations", () => {
       await expect(page).toHaveURL(new RegExp(`${link.href}$`));
     });
   }
+
 });
